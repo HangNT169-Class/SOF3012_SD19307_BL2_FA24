@@ -1,5 +1,6 @@
 package com.example.sof3012_sd19307_bl2_fa24.B1_Hibernate.util;
 
+import com.example.sof3012_sd19307_bl2_fa24.B1_Hibernate.entity.Category1;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -23,6 +24,7 @@ public class HibernateUtil {
         properties.put(Environment.SHOW_SQL, "true");
 
         conf.setProperties(properties);
+        conf.addAnnotatedClass(Category1.class); // Mapper doi tuong vs hibernate
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .applySettings(conf.getProperties()).build();

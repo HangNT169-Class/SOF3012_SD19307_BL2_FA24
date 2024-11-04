@@ -20,6 +20,7 @@ public class CategoryRepository {
 
     // CRUD (Them/Sua/Xoa/Detail)
     public List<Category1> getAll() {
+        System.out.println("aaa");
         return s.createQuery("FROM Category1 ").list();
     }
 

@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,7 +50,7 @@ public class CategoryServlet extends HttpServlet {
         if (uri.contains("hien-thi")) {
             // hien thi
             this.hienThiCate(request, response);
-        } else if (uri.contains("detail")) {
+        } else if (uri.contains("/detail")) {
             // detail
             this.detailCate(request, response);
         } else if (uri.contains("delete")) {
@@ -78,13 +80,27 @@ public class CategoryServlet extends HttpServlet {
         }
     }
 
-    private void addCate(HttpServletRequest request, HttpServletResponse response) {
+    @SneakyThrows
+    private void addCate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // B1: Khoi tao doi tuong
+        Category1 cate = new Category1();
+        // B2: Mapping thuoc tinh cho doi tuong
+        // C1: Lay gia tri lan luot cua cac o input
+//        String cateCode = request.getParameter("");
+//        String cateName = request.getParameter("");
+        // C2: BeanUtil => MAPPING 1 LOAT CAC THUOC TINH
+        BeanUtils.populate(cate, request.getParameterMap());
+        // B3: Goi ham add ben repo
+        categoryRepository.add(cate);
+        // B4: Quay ve trang chu
+        response.sendRedirect("/category/hien-thi");
     }
 
     private void searchCate(HttpServletRequest request, HttpServletResponse response) {
     }
 
-    private void viewAddCate(HttpServletRequest request, HttpServletResponse response) {
+    private void viewAddCate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/view/buoi1/add-category.jsp").forward(request, response);
     }
 
     private void viewUpdateCate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -54,6 +54,51 @@ public class CategoryRepository {
         return query.getResultList(); // LAY RA ALL LIST
     }
     // Sap xep them order by
+    // Phan trang => SQL / HQL
+
+    /**
+     * mieu ta cua the ham nay lam gi
+     *
+     * @param pageNo:   so Trang - vi tri cua trang (1,2,3...)
+     * @param pageSize: so luong phan tu trong 1 trang
+     * @return ham nay tra ra gi
+     */
+    // Trang dau tien bat dau bang 0
+    // HQL => createQuery
+    // SQL => createNativeQuery
+    public List<Category1> phanTrangSQL(int pageNo, int pageSize) {
+        int offset = pageNo * pageSize;
+        //B1: Viet cau lenh SQL
+        String sql = """
+            select * from category
+            ORDER BY id
+            OFFSET :os ROWS
+            FETCH NEXT :ps ROWS ONLY
+        """;
+        // B2: Tao query
+        Query query = s.createNativeQuery(sql, Category1.class);
+        // B3: Set ts gia tri
+        query.setParameter("os", offset); // BO QUA GIA TRI CUA OFFSET => TIEN DEN GIA OFFSET + 1
+        query.setParameter("ps", pageSize); // SO LUONG PHAN TU 1 TRANG
+        return query.getResultList();
+    }
+
+    public List<Category1> phanTrangHQL(int pageNo, int pageSize) {
+        int offset = pageNo * pageSize;
+        //B1: Viet cau lenh SQL
+        String hql = "SELECT cate FROM Category1 cate ORDER BY cate.id1";
+        // B2: Tao query
+        Query query = s.createQuery(hql, Category1.class);
+        // B3: Set min va max cua 1 trang
+        query.setFirstResult(offset); // BO QUA GIA TRI NAY => GIA TRI + 1
+        query.setMaxResults(pageSize); // SO LUONG PHAN TU 1 TRANG
+        return query.getResultList();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new CategoryRepository().phanTrangHQL(1,4));
+//        System.out.println(new CategoryRepository().getOne2(1L));
+    }
 
     // Them/Sua/Xoa
     // transation => tinh toan ven
@@ -98,7 +143,5 @@ public class CategoryRepository {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(new CategoryRepository().getOne2(1L));
-    }
+
 }

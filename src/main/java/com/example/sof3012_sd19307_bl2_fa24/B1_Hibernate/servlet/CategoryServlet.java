@@ -81,7 +81,7 @@ public class CategoryServlet extends HttpServlet {
     }
 
     @SneakyThrows
-    private void addCate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void addCate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // B1: Khoi tao doi tuong
         Category1 cate = new Category1();
         // B2: Mapping thuoc tinh cho doi tuong
@@ -93,7 +93,9 @@ public class CategoryServlet extends HttpServlet {
         // B3: Goi ham add ben repo
         categoryRepository.add(cate);
         // B4: Quay ve trang chu
-        response.sendRedirect("/category/hien-thi");
+       // response.sendRedirect("/category/hien-thi");
+        request.setAttribute("a1",categoryRepository.getAll());
+        request.getRequestDispatcher("/view/buoi1/categorys.jsp").forward(request, response);
     }
 
     private void searchCate(HttpServletRequest request, HttpServletResponse response) {

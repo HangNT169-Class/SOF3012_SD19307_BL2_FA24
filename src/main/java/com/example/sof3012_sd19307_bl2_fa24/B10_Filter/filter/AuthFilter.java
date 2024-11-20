@@ -37,7 +37,6 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-//        chain.doFilter(request, response);
         // Thuc hien sau khi ham init duoc chay
         // B1: Ep kieu
         HttpServletRequest req = (HttpServletRequest) request;
@@ -50,7 +49,22 @@ public class AuthFilter implements Filter {
             res.sendRedirect("/login");
         } else {
             // dang nhap roi
-            chain.doFilter(request, response);
+            String role = (String) session.getAttribute("role");
+            if (role.equalsIgnoreCase("Admin")) {
+                //truy cap vao tat ca cac trang
+                chain.doFilter(request, response);
+            } else if (role.equalsIgnoreCase("NhanVien")) {
+                String uri = req.getRequestURI();
+                if (uri.startsWith("/category/")) {
+                    chain.doFilter(request, response);
+                } else {
+                    // cam quyen
+                    res.sendRedirect("/view/buoi10/403.jsp");
+                }
+            } else {
+                // truong hop con lai => /login
+                res.sendRedirect("/login");
+            }
         }
 
     }

@@ -10,6 +10,8 @@
     <button type="submit">Search</button>
 </form>
 <br/>
+<p>Xin chao ${sessionScope.username1}</p>
+<a href="/dang-xuat">Dang xuat</a> <br/>
 <button><a href="/category/view-add">Add Cate</a></button>
 <table>
     <thead>
